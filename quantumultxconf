@@ -277,8 +277,58 @@ final, proxy
 ;^http://example\.com/resource9/ url script-request-header request-header.js
 ;^http://example\.com/resource10/ url script-request-body request-body.js
 
-
-
+# 微信去广告
+^https?:\/\/mp\.weixin\.qq\.com\/mp\/getappmsgad url script-response-body Wechat.js
+# 知乎处理用户信息
+^https?:\/\/api\.zhihu\.com\/people\/ url script-response-body zhihu.js
+# 知乎信息流去广告
+^https?:\/\/api\.zhihu\.com\/(moments|topstory)(\/|\?)?(recommend|action=|feed_type=)(?!\/people) url script-response-body zhihu.js
+# 知乎回答列表去广告
+^https?:\/\/api\.zhihu\.com\/v4\/questions url script-response-body zhihu.js
+# 知乎获取黑名单
+^https?:\/\/api\.zhihu\.com\/settings\/blocked_users url script-response-body zhihu.js
+# 知乎官方消息去广告
+^https?:\/\/api\.zhihu\.com\/notifications\/v3\/(message|timeline\/entry\/system_message) url script-response-body zhihu.js
+# 知乎预置关键词去广告
+^https?:\/\/api\.zhihu\.com\/search\/preset_words\? url script-response-body zhihu.js
+# 优化软件配置
+^https?:\/\/appcloud2\.zhihu\.com\/v\d+\/config url script-response-body zhihu.js
+# 知乎热搜去广告
+^https?:\/\/api\.zhihu\.com\/search\/top_search\/tabs\/hot\/items url script-response-body zhihu.js
+# 知乎热榜去广告
+^https?:\/\/api\.zhihu\.com\/topstory\/hot-lists?(\?|\/) url script-response-body zhihu.js
+# 知乎评论去广告
+^https?:\/\/api\.zhihu\.com\/(comment_v5\/)?(answers|comments?|articles|pins)\/\d+\/(root_|child_)?comments? url script-response-body zhihu.js
+# 知乎回答列表去广告
+^https?:\/\/www\.zhihu\.com\/appview\/v2\/answer\/.*(entry=(?!(preload-topstory|preload-search|preload-subscription)))? url script-response-body zhihu.js
+# 知乎屏蔽关键词解锁
+^https?:\/\/api\.zhihu\.com\/feed-root\/block url script-analyze-echo-response zhihu.js
+# 拦截知乎开屏广告
+URL-REGEX,^https?:\/\/api\.zhihu\.com\/commercial_api\/launch_v2\? url reject-dict
+# 知乎去除最常访问
+^https?:\/\/api\.zhihu\.com\/moments\/recent url reject-dict
+# 知乎去除回答下的广告
+^https?:\/\/www\.zhihu\.com\/api\/v4\/answers\/\d+\/recommendations url reject-dict
+# 知乎其他广告拦截
+^https?:\/\/api\.zhihu\.com\/(notifications\/v3\/count|v3\/package|me\/guides|drama\/living-info|ad|fringe|commercial|market\/popovers|.*featured-comment-ad) url reject-dict
+# 知乎拦截部分预加载
+# ^https?:\/\/www\.zhihu\.com\/appview\/(p|v2\/answer|zvideo)\/.*entry=(preload-topstory|preload-search|preload-subscription) url reject-dict
+# 知乎网页版去广告
+^https?:\/\/www\.zhihu\.com\/api\/v4/(questions|anwsers)\/\d+/related-readings url reject-dict
+^https?:\/\/www\.zhihu\.com\/api\/v4\/hot_recommendation url reject-dict
+^https?:\/\/www\.zhihu\.com\/commercial_api\/banners_v3\/mobile_banner url reject-dict
+^https?:\/\/zhuanlan\.zhihu\.com\/api\/articles\/\d+\/recommendation url reject-dict
+# 知乎品牌提问广告
+^https?:\/\/api\.zhihu\.com\/brand\/question\/\d+/card\? url reject-dict
+^https?:\/\/www\.zhihu\.com\/api\/v\d+\/brand\/question/\d+/card\? url reject-dict
+# 屏蔽消息页面上拉的用户精选
+^https?:\/\/api\.zhihu\.com/moments/hybrid\? url reject-dict
+# 知乎下发的配置，如皮肤等
+^https?:\/\/api\.zhihu\.com\/ab\/api\/v1\/products\/zhihu\/platforms\/ios\/config url reject-200
+# 屏蔽知乎“我的”页面推荐开通会员的卡片
+^https?:\/\/api\.zhihu\.com\/people\/self\/new_user_card url reject-200
+# 知乎去除Tab页关注人头像
+^https?:\/\/api\.zhihu\.com\/moments\/tab_v2 url reject-dict
 
 [task_local]
 #
@@ -319,7 +369,7 @@ final, proxy
 # Important !!! You should always keep your CA passphrase and p12 private.
 #
 [mitm]
-hostname = dataflow.biliapi.com, app.bilibili.com
+hostname = dataflow.biliapi.com, app.bilibili.com,mp.weixin.qq.com,www.zhihu.com,api.zhihu.com,zhuanlan.zhihu.com,appcloud2.zhihu.com,103.41.167.236,103.41.167.234,103.41.167.235,103.41.167.226
 passphrase = 08FFA931
 p12 = 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
 ;passphrase =
