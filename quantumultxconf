@@ -1,19 +1,16 @@
 # Sample Quantumult Configuration
 #
-# Line started with ";" or "#" or "//" shall be comments.
 # 以 ";" 或 "#" 或 "//" 开头的行为注释行。
 #
 
 [general]
-# SS-URI scheme can be found at https://shadowsocks.org/en/spec/SIP002-URI-Scheme.html
-#
-# Quantumult uses HEAD method send HTTP request to the server_check_url to test the proxy's status, the results should be two latencies, the first one is TCP handshake to the proxy server, the second one is the HTTP latency(The duration between Quantumult successfully received the HTTP response from the server_check_url and Quantumult start sending the HTTP request to the server_check_url). The lightning icon means that the TCP fast open is successful. If the server in section [server_local] or section [server_remote] has its own server_check_url, its own server_check_url will be used instead of the server_check_url in section [general].
+# Quantumult 使用 HEAD 方法将 HTTP 请求发送到服务器检查 url 来测试代理的状态，结果应该是两个延迟，第一个是 TCP 与代理服务器的握手，第二个是 Quantumult 成功地从服务器检查 url 接收 HTTP 响应的总时间。闪电图标表示 TCP Fast Open 成功。如果 [server_local] 或 [server_remote] 中的服务器有自己的 server_check_url，则会用自己的 server_check_url 代替 [general] 中的 server_check_url。
 #
 # Quantumult 使用 HTTP HEAD 方法对测试网址 server_check_url 进行网页响应性测试（测试结果为通过该节点访问此网页的 HTTP 延迟, 即 HTTP 响应时间与 HTTP 请求发起时间的差值），来确认节点的可用性。
 # Quantumult 界面中的延迟测试方式均为网页响应性测试，显示的最终延迟均为通过对应节点访问测试网页的 HTTP 延迟。
 # 由于 Trojan 协议为无响应校验协议，使得 HTTP 检测方式即使获得了 HTTP 响应，也不代表节点一定可用。
 #
-# The dns_exclusion_list contains the domains that disabled the placeholder IP(198.18.*), domains that are not in the dns_exclusion_list all have placeholder IP enabled and have turned on the resolve-on-remote setting.
+# dns_exclusion_list 包含了禁用占位符 IP (240.*) 的域，不在 dns_exclusion_list 中的域都启用了占位符 IP，并打开了 resolve-on-remote 设置
 #
 # The udp_whitelist contains the destination UDP port, empty means all the ports are in udp_whitelist. UDP packtes(through Quantumult tunnel interface) with destination ports that are not in the udp_whitelist will be dropped and the ICMP(port unreachable) messages will be sent back. This setting has nothing to do with the filter rules or policies and has nothing to do with the proxy(server) port either.
 #
@@ -40,8 +37,8 @@
 server_check_url=http://cp.cloudflare.com/generate_204
 network_check_url = http://www.baidu.com
 dns_exclusion_list=*.cmpassport.com, *.jegotrip.com.cn, *.icitymobile.mobi, id6.me, *.pingan.com.cn, *.cmbchina.com
-geo_location_checker=http://ip-api.com/json/?lang=zh-CN, https://raw.githubusercontent.com/CenBoMin/QuantumultX/master/IP.js
-resource_parser_url=https://cdn.jsdelivr.net/gh/KOP-XIAO/QuantumultX@master/Scripts/resource-parser.js
+geo_location_checker=http://ip-api.com/json/?lang=zh-CN, https://raw.githubusercontent.com/dlutly/QuantumultX/main/ip.js
+resource_parser_url=https://raw.githubusercontent.com/dlutly/QuantumultX/main/parser.js
 excluded_routes=239.255.255.250/32, 24.105.30.129/32, 185.60.112.157/32, 185.60.112.158/32, 182.162.132.1/32, 192.168.0.0/16, 10.0.0.0/8, 172.16.0.0/12, 100.64.0.0/10, 17.0.0.0/8
 fallback_udp_policy=direct
 
